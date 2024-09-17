@@ -1,5 +1,11 @@
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { BookOpen, Focus } from "lucide-react";
 import logo from '~/components/img/logo.png'
+import { connectDB } from "~/data/mongoose";
+
+export const loader = async ({ }: LoaderFunctionArgs) => {
+  return null
+};
 
 export default function Index(){
   return (
