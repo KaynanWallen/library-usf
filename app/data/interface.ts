@@ -9,6 +9,7 @@ export interface livroInterface{
   id: String,
   titulo: String,
   autor: String,
+  generos: string,
   data_publicacao: String,
   data_aquisicao: String,
   isbn: String,
