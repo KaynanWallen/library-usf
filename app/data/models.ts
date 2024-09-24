@@ -17,5 +17,5 @@ const livroSchema = new mongoose.Schema({
   editora: String,
 });
 
-export const Usuario = mongoose.model('Usuario', usuarioSchema);
-export const Livro = mongoose.model('Livro', livroSchema);
+export const Usuario = mongoose.models.Usuario || mongoose.model('Usuario', usuarioSchema);
+export const Livro = mongoose.models.Livro || mongoose.model('Livro', livroSchema)

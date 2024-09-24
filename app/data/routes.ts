@@ -1,11 +1,14 @@
 import { livroInterface } from "./interface"
 import { Livro } from "./models"
+import { connectDB } from "./mongoose"
 
 export const criarLivro = async (livro: livroInterface) => {
+  await connectDB()
   try {
       const livroRecord = await Livro.create(livro)
       return livroRecord
   } catch(err: unknown) {
+    console.log(err)
       if (err instanceof Error) {
           return { error: err.message } as { error: string }
       }

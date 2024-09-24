@@ -1,6 +1,6 @@
-import { Calendar, CalendarIcon } from "lucide-react"
+import { CalendarIcon } from "lucide-react"
 import { useState } from "react"
-import { SubmitHandler, useForm } from "react-hook-form"
+import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import { Button } from "~/components/ui/button"
 import {
   Card,
@@ -17,17 +17,37 @@ import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover
 import { Separator } from "~/components/ui/separator"
 import { livroInterface } from "~/data/interface"
 import { cn } from "~/lib/utils"
+import { Calendar } from "~/components/ui/calendar"
+import { useSubmit } from "@remix-run/react"
+import { ActionFunctionArgs, json } from "@remix-run/node"
+import { criarLivro } from "~/data/routes"
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const body: livroInterface = await request.json()
+  const livroRecord = await criarLivro(body)
+  if('error' in livroRecord){
+    return json({data: 'error'})
+  }
+
+  console.log('Livro Criado')
+  return json({data: 'sucess'})
+}
 
 export default function Index() {
   const {
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors },
   } = useForm<livroInterface>()
 
+  const submit = useSubmit()
   const onSubmit: SubmitHandler<livroInterface> = (data) => {
-    console.log(data)
+    submit( 
+      {...data},
+      { method: "post", encType: "application/json" }
+    );
   }
 
   const [date, setDate] = useState<Date>()
@@ -82,41 +102,84 @@ export default function Index() {
 
               </span>
 
-              <span>
+              <span className="flex flex-col gap-2">
                 <Label>
                   Data Publicação
                 </Label>
-                {/* <Input {...register('data_publicacao')} /> */}
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-[280px] justify-start text-left font-normal",
-                        !date && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "PPP") : <span>Pick a date</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
+                <Controller
+                  name="data_publicacao"
+                  control={control}
+                  rules={{
+                    required: "Campo obrigatório",
+                  }}
+                  defaultValue={""} // Define o valor padrão como false
+                  render={({ field }) => (
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={`justify-start text-left font-normal border-border rounded-lg ${!field.value && "text-muted-foreground"
+                            }`}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value ? (
+                            format(field.value, "dd/MM/yyyy")
+                          ) : (
+                            <span>Escolha a data</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={new Date(field.value)}
+                          onSelect={(v) => field.onChange(v)}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  )}
+                />
               </span>
 
-              <span>
+              <span className="flex flex-col gap-2">
                 <Label>
                   Data Aquisição
                 </Label>
-                <Input {...register('data_aquisicao')} />
-
+                <Controller
+                  name="data_aquisicao"
+                  control={control}
+                  rules={{
+                    required: "Campo obrigatório",
+                  }}
+                  defaultValue={""} // Define o valor padrão como false
+                  render={({ field }) => (
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={`justify-start text-left font-normal border-border rounded-lg ${!field.value && "text-muted-foreground"
+                            }`}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value ? (
+                            format(field.value, "dd/MM/yyyy")
+                          ) : (
+                            <span>Escolha a data</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={new Date(field.value)}
+                          onSelect={(v) => field.onChange(v)}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  )}
+                />
               </span>
             </form>
           </CardContent>

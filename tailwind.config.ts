@@ -25,7 +25,6 @@ const config = {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			vitgreen: {
-  				'default': '#CCFF00',
   				'100': '#AAFF00',
   				'200': '#8FFF00',
   				'300': '#6EFF00',
@@ -34,10 +33,10 @@ const config = {
   				'600': '#A9D400',
   				'700': '#90B301',
   				'800': '#749200',
-  				'900': '#586E00'
+  				'900': '#586E00',
+  				default: '#CCFF00'
   			},
   			vitblue: {
-  				'default': '#0000CC',
   				'100': '#CDD6FF',
   				'200': '#A5B2FF',
   				'300': '#3A43FF',
@@ -46,7 +45,8 @@ const config = {
   				'600': '#0000A4',
   				'700': '#000090',
   				'800': '#00007C',
-  				'900': '#203255'
+  				'900': '#203255',
+  				default: '#0000CC'
   			},
   			vitoffwhite: '#F2F9D8',
   			vitwhite: '#f7f7f7',
